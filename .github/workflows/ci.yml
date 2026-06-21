@@ -45,7 +45,7 @@ jobs:
   #       env:
   #         NEXT_PUBLIC_API_URL: http://localhost:4000
 
-build-and-push:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
