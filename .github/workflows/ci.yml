@@ -51,7 +51,12 @@ jobs:
             --token=${{ secrets.OPENSHIFT_TOKEN }} \
             --server=${{ secrets.OPENSHIFT_SERVER }}
 
+      - name: Deploy manifests
+        run: |
+          oc apply -f k8s/ -n ${{ secrets.OPENSHIFT_NAMESPACE }}
+          
       - name: Update image
         run: |
           oc set image deployment/the-intelligent-investor-frontend \
-          the-intelligent-investor-frontend=quay.io/roni-tamari/the-intelligent-investor-frontend:prod
+          the-intelligent-investor-frontend=quay.io/roni-tamari/the-intelligent-investor-frontend:prod \
+          -n ${{ secrets.OPENSHIFT_NAMESPACE }}
