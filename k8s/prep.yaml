@@ -17,12 +17,6 @@ spec:
           image: quay.io/roni-tamari/the-intelligent-investor-frontend:prep
           ports:
             - containerPort: 3000
-          env:
-            - name: NEXT_PUBLIC_API_URL
-              valueFrom:
-                secretKeyRef:
-                  name: frontend-env-prep
-                  key: NEXT_PUBLIC_API_URL
 ---
 apiVersion: v1
 kind: Service
