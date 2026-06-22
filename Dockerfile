@@ -6,6 +6,7 @@ RUN npm ci
 FROM dependencies AS builder
 WORKDIR /app
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+RUN echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL"
 COPY . .
 RUN npm run build
 
