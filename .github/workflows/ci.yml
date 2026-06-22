@@ -32,5 +32,26 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push $IMAGE_NAME:${{ github.sha }}
-          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:prep
+          docker push $IMAGE_NAME:prod
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install oc
+        uses: redhat-actions/oc-installer@v1
+
+      - name: Login OpenShift
+        run: |
+          oc login \
+            --token=${{ secrets.OPENSHIFT_TOKEN }} \
+            --server=${{ secrets.OPENSHIFT_SERVER }}
+
+      - name: Update image
+        run: |
+          oc set image deployment/the-intelligent-investor-frontend \
+          the-intelligent-investor-frontend=quay.io/roni-tamari/the-intelligent-investor-frontend:prod
