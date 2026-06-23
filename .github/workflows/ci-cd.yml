@@ -42,12 +42,18 @@ jobs:
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: Build Docker image
+      - name: Build Docker image prep
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
-            -t $IMAGE_NAME:prod \
+            --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL_PREP }}" \
             -t $IMAGE_NAME:prep \
+            .
+            
+      - name: Build Docker image prod
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL_PROD }}" \
+            -t $IMAGE_NAME:prod \
             .
 
       - name: Push Docker image
