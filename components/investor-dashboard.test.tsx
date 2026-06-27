@@ -20,6 +20,8 @@ vi.mock('recharts', () => ({
 describe('InvestorDashboard', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    window.localStorage.clear();
+    delete document.documentElement.dataset.theme;
   });
 
   it('updates bucket amounts after entering salary values', async () => {
@@ -70,5 +72,25 @@ describe('InvestorDashboard', () => {
       'http://localhost:4000/calculations',
       expect.objectContaining({ method: 'POST' }),
     );
+  });
+
+  it('toggles and persists dark mode', async () => {
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+      new Response(JSON.stringify([]), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+
+    render(<InvestorDashboard />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
+
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(window.localStorage.getItem('investor-theme')).toBe('dark');
+    expect(
+      screen.getByRole('button', { name: 'Switch to light mode' }),
+    ).toBeInTheDocument();
   });
 });

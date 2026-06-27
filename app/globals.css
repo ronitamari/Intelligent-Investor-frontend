@@ -5,12 +5,57 @@
   --card: #fffdf7;
   --line: #dfe1d8;
   --green: #176b4d;
+  --green-contrast: #ffffff;
   --green-soft: #dcecdf;
   --amber: #d99935;
   --blue: #32677f;
   --plum: #70546f;
+  --panel-border: rgb(17 37 31 / 8%);
+  --panel-bg: rgb(255 253 247 / 92%);
+  --panel-shadow: rgb(33 57 47 / 9%);
+  --input-bg: #ffffff;
+  --body-bg:
+    radial-gradient(circle at 10% 15%, rgb(227 219 195 / 75%), transparent 28rem),
+    linear-gradient(135deg, #f8f5ec 0%, #eff3ea 100%);
+  --hero-bg: #11251f;
+  --hero-text: #ffffff;
+  --hero-muted: #bdd0c8;
+  --hero-eyebrow: #9bd8bc;
+  --chart-line: #176b4d;
+  --chart-grid: #e4e5dd;
+  --chart-fill-start: rgb(23 107 77 / 30%);
+  --chart-fill-end: rgb(23 107 77 / 2%);
   --font-body: "Segoe UI", Arial, sans-serif;
   --font-display: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --ink: #eef7f1;
+  --muted: #a8b8ae;
+  --paper: #0c1411;
+  --card: #15221d;
+  --line: #31443b;
+  --green: #62c393;
+  --green-contrast: #07110d;
+  --green-soft: #1f3a2e;
+  --amber: #e4ad56;
+  --blue: #6fb1ca;
+  --plum: #c79bc5;
+  --panel-border: rgb(214 235 224 / 12%);
+  --panel-bg: rgb(21 34 29 / 94%);
+  --panel-shadow: rgb(0 0 0 / 34%);
+  --input-bg: #0f1b16;
+  --body-bg:
+    radial-gradient(circle at 12% 10%, rgb(42 77 62 / 70%), transparent 30rem),
+    linear-gradient(135deg, #09110e 0%, #17241f 100%);
+  --hero-bg: #dfeee5;
+  --hero-text: #0b1813;
+  --hero-muted: #345146;
+  --hero-eyebrow: #176b4d;
+  --chart-line: #62c393;
+  --chart-grid: #34483f;
+  --chart-fill-start: rgb(98 195 147 / 28%);
+  --chart-fill-end: rgb(98 195 147 / 4%);
 }
 
 * {
@@ -24,9 +69,7 @@ html {
 body {
   margin: 0;
   color: var(--ink);
-  background:
-    radial-gradient(circle at 10% 15%, rgb(227 219 195 / 75%), transparent 28rem),
-    linear-gradient(135deg, #f8f5ec 0%, #eff3ea 100%);
+  background: var(--body-bg);
   font-family: var(--font-body);
   min-height: 100vh;
 }
@@ -56,6 +99,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 18px;
   margin-bottom: 26px;
 }
 
@@ -73,9 +117,31 @@ button {
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  color: white;
+  color: var(--green-contrast);
   background: var(--green);
   box-shadow: 0 8px 20px rgb(23 107 77 / 22%);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  min-width: 112px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background: var(--card);
+  font-weight: 800;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--green);
+  outline: none;
 }
 
 .saved-select {
@@ -94,10 +160,10 @@ button {
 }
 
 .panel {
-  border: 1px solid rgb(17 37 31 / 8%);
+  border: 1px solid var(--panel-border);
   border-radius: 22px;
-  background: rgb(255 253 247 / 92%);
-  box-shadow: 0 20px 60px rgb(33 57 47 / 9%);
+  background: var(--panel-bg);
+  box-shadow: 0 20px 60px var(--panel-shadow);
 }
 
 .form-panel {
@@ -168,7 +234,7 @@ h2 {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: white;
+  background: var(--input-bg);
   transition: border-color 150ms, box-shadow 150ms;
 }
 
@@ -196,14 +262,14 @@ h2 {
 .field > input {
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: white;
+  background: var(--input-bg);
 }
 
 .primary-button {
   padding: 14px 18px;
   border: 0;
   border-radius: 12px;
-  color: white;
+  color: var(--green-contrast);
   background: var(--green);
   font-weight: 800;
   box-shadow: 0 10px 24px rgb(23 107 77 / 18%);
@@ -234,8 +300,8 @@ h2 {
   position: relative;
   overflow: hidden;
   padding: clamp(28px, 5vw, 56px);
-  color: white;
-  background: var(--ink);
+  color: var(--hero-text);
+  background: var(--hero-bg);
 }
 
 .hero::after {
@@ -250,13 +316,13 @@ h2 {
 }
 
 .hero .eyebrow {
-  color: #9bd8bc;
+  color: var(--hero-eyebrow);
 }
 
 .hero p {
   max-width: 650px;
   margin-bottom: 0;
-  color: #bdd0c8;
+  color: var(--hero-muted);
   line-height: 1.65;
 }
 
@@ -389,6 +455,15 @@ h2 {
     align-items: stretch;
     flex-direction: column;
     gap: 14px;
+  }
+
+  .topbar-actions {
+    flex-direction: column;
+  }
+
+  .theme-toggle,
+  .saved-select {
+    width: 100%;
   }
 
   .bucket-grid {

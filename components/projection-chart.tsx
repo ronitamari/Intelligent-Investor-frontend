@@ -30,11 +30,15 @@ export function ProjectionChart({ data }: ProjectionChartProps) {
         <AreaChart data={data} margin={{ top: 12, right: 12, left: 4, bottom: 0 }}>
           <defs>
             <linearGradient id="projectionFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#176b4d" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#176b4d" stopOpacity={0.02} />
+              <stop offset="5%" stopColor="var(--chart-fill-start)" />
+              <stop offset="95%" stopColor="var(--chart-fill-end)" />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="#e4e5dd" strokeDasharray="4 4" vertical={false} />
+          <CartesianGrid
+            stroke="var(--chart-grid)"
+            strokeDasharray="4 4"
+            vertical={false}
+          />
           <XAxis
             dataKey="year"
             tickFormatter={(year) => `Y${year}`}
@@ -57,10 +61,10 @@ export function ProjectionChart({ data }: ProjectionChartProps) {
           <Area
             type="monotone"
             dataKey="value"
-            stroke="#176b4d"
+            stroke="var(--chart-line)"
             strokeWidth={3}
             fill="url(#projectionFill)"
-            activeDot={{ r: 5, fill: '#176b4d' }}
+            activeDot={{ r: 5, fill: 'var(--chart-line)' }}
           />
         </AreaChart>
       </ResponsiveContainer>

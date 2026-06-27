@@ -8,6 +8,8 @@ import type {
 } from '../lib/types';
 import { ProjectionChart } from './projection-chart';
 
+type Theme = 'light' | 'dark';
+
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -32,6 +34,7 @@ function profileResult(profile: FinancialProfile): CalculationResult | null {
 }
 
 export function InvestorDashboard() {
+  const [theme, setTheme] = useState<Theme>('light');
   const [name, setName] = useState('');
   const [grossSalary, setGrossSalary] = useState('');
   const [bankNet, setBankNet] = useState('');
@@ -40,6 +43,18 @@ export function InvestorDashboard() {
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem('investor-theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem('investor-theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     api
@@ -147,6 +162,7 @@ export function InvestorDashboard() {
 
   const finalProjection =
     result?.wealthProjection[result.wealthProjection.length - 1]?.value ?? 0;
+  const nextTheme = theme === 'dark' ? 'light' : 'dark';
 
   return (
     <main className="page-shell">
@@ -155,21 +171,31 @@ export function InvestorDashboard() {
           <span className="brand-mark">II</span>
           The Intelligent Investor
         </div>
-        <select
-          className="saved-select"
-          aria-label="Load a saved profile"
-          defaultValue=""
-          onChange={(event) => loadProfile(event.target.value)}
-        >
-          <option value="" disabled>
-            {profiles.length ? 'Load saved profile' : 'No saved profiles'}
-          </option>
-          {profiles.map((profile) => (
-            <option key={profile.id} value={profile.id}>
-              {profile.name}
+        <div className="topbar-actions">
+          <button
+            className="theme-toggle"
+            type="button"
+            aria-label={`Switch to ${nextTheme} mode`}
+            onClick={() => setTheme(nextTheme)}
+          >
+            {theme === 'dark' ? 'Light' : 'Dark'} mode
+          </button>
+          <select
+            className="saved-select"
+            aria-label="Load a saved profile"
+            defaultValue=""
+            onChange={(event) => loadProfile(event.target.value)}
+          >
+            <option value="" disabled>
+              {profiles.length ? 'Load saved profile' : 'No saved profiles'}
             </option>
-          ))}
-        </select>
+            {profiles.map((profile) => (
+              <option key={profile.id} value={profile.id}>
+                {profile.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </header>
 
       <div className="dashboard">
